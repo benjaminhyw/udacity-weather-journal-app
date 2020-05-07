@@ -29,3 +29,26 @@ function listening() {
   console.log("server running");
   console.log(`running on localhost: ${port}`);
 }
+
+// Routes
+app.get("/", sendData);
+
+function sendData(request, response) {
+  response.send(projectData);
+}
+
+app.post("/", callBack);
+
+function callBack(request, response) {
+  console.log("POST");
+
+  let updatedProjectData = {
+    temperature: request.body.temperature,
+    date: request.body.date,
+    userResponse: request.body.userResponse,
+  };
+
+  projectData.unshift(updatedProjectData);
+
+  response.send("POST received");
+}

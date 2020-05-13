@@ -26,7 +26,7 @@ generateButton.addEventListener("click", async (event) => {
       await postWeatherData("/add", result);
     })
     .then(async () => {
-      let response = await (await getAllWeatherData("/all")).json();
+      let response = await getAllWeatherData("/all");
       console.log(response);
     });
 });
@@ -37,7 +37,7 @@ async function fetchWeatherData(zipCode) {
 }
 
 async function postWeatherData(url = "", data = {}) {
-  const response = await fetch(url, {
+  await fetch(url, {
     method: "POST",
     credentials: "same-origin",
     headers: {
@@ -48,5 +48,15 @@ async function postWeatherData(url = "", data = {}) {
 }
 
 async function getAllWeatherData(route) {
-  return await fetch(route);
+  const date = document.getElementById("date");
+  const temp = document.getElementById("temp");
+  const content = document.getElementById("content");
+
+  await fetch(route).then(async (result) => {
+    result = await result.json();
+
+    date.innerText = result[0].date;
+    temp.innerText = result[0].temperature;
+    content.innerText = result[0].userResponse;
+  });
 }

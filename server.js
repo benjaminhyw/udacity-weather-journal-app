@@ -1,5 +1,5 @@
 // Setup empty JS object to act as endpoint for all routes
-projectData = {};
+projectData = [];
 
 // Dependencies
 const express = require("express");
@@ -31,13 +31,13 @@ function listening() {
 }
 
 // Routes
-app.get("/", sendData);
+app.get("/all", sendData);
 
 function sendData(request, response) {
   response.send(projectData);
 }
 
-app.post("/", callBack);
+app.post("/add", callBack);
 
 function callBack(request, response) {
   console.log("POST");
@@ -49,6 +49,8 @@ function callBack(request, response) {
   };
 
   projectData.unshift(updatedProjectData);
+
+  console.log(projectData);
 
   response.send("POST received");
 }

@@ -8,14 +8,45 @@ let newDate = d.getMonth() + "." + d.getDate() + "." + d.getFullYear();
 
 const generateButton = document.getElementById("generate");
 generateButton.addEventListener("click", async (event) => {
-  const zipInput = document.getElementById("zip");
+  const zip = document.getElementById("zip").value;
+  const feelings = document.getElementById("feelings").value;
   event.preventDefault();
-  const weatherData = await fetchWeatherData(zipInput.value);
 
-  console.log(weatherData);
+  await (await fetchWeatherData(zip))
+    .json()
+    .then(async (result) => {
+      const object = {
+        date: newDate,
+        temperature: result.main.temp,
+        userResponse: feelings,
+      };
+      return object;
+    })
+    .then(async (result) => {
+      await postWeatherData("/add", result);
+    })
+    .then(async () => {
+      let response = await (await getAllWeatherData("/all")).json();
+      console.log(response);
+    });
 });
 
 async function fetchWeatherData(zipCode) {
   const query = `${BASEURL}zip=${zipCode}&appid=${WEATHERAPIKEY}`;
-  return fetch(query);
+  return await fetch(query);
+}
+
+async function postWeatherData(url = "", data = {}) {
+  const response = await fetch(url, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
+
+async function getAllWeatherData(route) {
+  return await fetch(route);
 }

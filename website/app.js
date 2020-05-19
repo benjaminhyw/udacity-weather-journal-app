@@ -55,8 +55,8 @@ async function getAllWeatherData(route) {
   await fetch(route).then(async (result) => {
     result = await result.json();
 
-    date.innerHTML = result[0].date;
-    temp.innerHTML = result[0].temperature;
-    content.innerHTML = result[0].userResponse;
+    date.innerHTML = result[newDate].date;
+    temp.innerHTML = result[newDate].temperature;
+    content.innerHTML = result[newDate].userResponse;
   });
 }

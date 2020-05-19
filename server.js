@@ -1,5 +1,5 @@
 // Setup empty JS object to act as endpoint for all routes
-projectData = [];
+projectData = {};
 
 // Dependencies
 const express = require("express");
@@ -48,7 +48,7 @@ function callBack(request, response) {
     userResponse: request.body.userResponse,
   };
 
-  projectData.unshift(updatedProjectData);
+  projectData[request.body.date] = updatedProjectData;
 
   console.log(projectData);
 
